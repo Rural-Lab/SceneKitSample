@@ -40,7 +40,6 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         
         // カメラの位置を設定する。
         cameraNode.position = SCNVector3(x: 0, y: 0, z: 10)
-//        cameraNode.rotation = SCNVector4(x: 0, y: 0, z: 0, w: 0)
         
         // シーンに光を与える為のノードを作成
         let lightNode = SCNNode()
@@ -66,9 +65,7 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         
         // ノード名を指定してshipのノードをシーンから取得する
         let ship = scene!.rootNode.childNodeWithName("ship", recursively: true)!
-//        ship.position = SCNVector3(x: 0, y: -10, z: 0)
         // shipに対してアニメーションを設定する。ここではy軸を中心とした永続的な回転を設定している。
-//        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
         
         // シーンを表示するためのビューへの参照を取得
         let scnView = self.view as! SCNView
@@ -115,8 +112,6 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
             var attitude: CMAttitude = deviceManager.attitude
             
             var quaternion: CMQuaternion = attitude.quaternion
-//            SCNTransaction.begin()
-//            SCNTransaction.setAnimationDuration(0.5)
             
             cameraNode.rotation = SCNQuaternion(x: Float32(quaternion.x), y: Float32(quaternion.y), z: Float32(quaternion.z), w: Float32(quaternion.w))
 
@@ -126,9 +121,6 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
             let rq = SCNVector4Make(qp.x, qp.y, qp.z, qp.w)
             
             cameraNode.orientation = rq
-        
-//            SCNTransaction.commit()
-            
         })
     }
     
