@@ -111,35 +111,12 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         // Start motion data acquisition
         motionManager.startDeviceMotionUpdatesToQueue( NSOperationQueue.currentQueue(), withHandler:{
             deviceManager, error in
-            //            var accel: CMAcceleration = deviceManager.userAcceleration
-            //            self.acc_x.text = String(format: "%.2f", accel.x)
-            //            self.acc_y.text = String(format: "%.2f", accel.y)
-            //            self.acc_z.text = String(format: "%.2f", accel.z)
-            //
-            //            var gyro: CMRotationRate = deviceManager.rotationRate
-            //            self.gyro_x.text = String(format: "%.2f", gyro.x)
-            //            self.gyro_y.text = String(format: "%.2f", gyro.y)
-            //            self.gyro_z.text = String(format: "%.2f", gyro.z)
-            //
+            
             var attitude: CMAttitude = deviceManager.attitude
-            //            self.attitude_roll.text = String(format: "%.2f", attitude.roll)
-            //            self.attitude_pitch.text = String(format: "%.2f", attitude.pitch)
-            //            self.attitude_yaw.text = String(format: "%.2f", attitude.yaw)
             
             var quaternion: CMQuaternion = attitude.quaternion
-            
-//            self.attitude_x.text = String(format: "%.2f", quaternion.x)
-//            self.attitude_y.text = String(format: "%.2f", quaternion.y)
-//            //            self.attitude_z.text = String(format: "%.2f", quaternion.z)
-//            self.attitude_w.text = String(format: "%.2f", quaternion.w)
-//            println("x:\(quaternion.x) y:\(quaternion.y) z:\(quaternion.z) w:\(quaternion.w) ")
-            println("x:\(cameraNode.rotation.x),y:\(cameraNode.rotation.y),z:\(cameraNode.rotation.z)")
-//            println("x:\(cameraNode.position.x),y:\(cameraNode.position.y),z:\(cameraNode.position.z)")
-//            println("------------------------------------")
-//            if let camera = scnView.scene!.rootNode.childNodeWithName("camera", recursively: false) {
-            SCNTransaction.begin()
-            SCNTransaction.setAnimationDuration(0.5)
-            
+//            SCNTransaction.begin()
+//            SCNTransaction.setAnimationDuration(0.5)
             
             cameraNode.rotation = SCNQuaternion(x: Float32(quaternion.x), y: Float32(quaternion.y), z: Float32(quaternion.z), w: Float32(quaternion.w))
 
@@ -150,10 +127,8 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
             
             cameraNode.orientation = rq
         
-            SCNTransaction.commit()
-//                println(camera)
+//            SCNTransaction.commit()
             
-//            }
         })
     }
     
@@ -208,121 +183,6 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
             return Int(UIInterfaceOrientationMask.All.rawValue)
         }
     }
-    
-//    weak var scene : SCNScene?
-//    weak var timer : NSTimer?
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        self.view.backgroundColor = UIColor.orangeColor()
-//        
-//        self.setupScene()
-//        self.setupObject()
-//        self.setupLight()
-//        self.setupCamera()
-//        
-//        lm = CLLocationManager()
-//        // 位置情報を取るよう設定
-//
-//        // ※ 初回は確認ダイアログ表示
-//        lm.requestAlwaysAuthorization()
-//        lm.delegate = self
-//        lm.distanceFilter = 1.0 // 1m毎にGPS情報取得
-//        lm.desiredAccuracy = kCLLocationAccuracyBest // 最高精度でGPS取得
-//        lm.startUpdatingLocation() // 位置情報更新機能起動
-//        lm.startUpdatingHeading() // コンパス更新機能起動
-//
-//        // Initialize MotionManager
-//        motionManager.deviceMotionUpdateInterval = 0.05 // 20Hz
-//
-//        // Start motion data acquisition
-//        motionManager.startDeviceMotionUpdatesToQueue( NSOperationQueue.currentQueue(), withHandler:{
-//            deviceManager, error in
-//            var attitude: CMAttitude = deviceManager.attitude
-//            var quaternion: CMQuaternion = attitude.quaternion
-//
-//            if let camera = self.scene?.rootNode.childNodeWithName("camera", recursively: false) {
-//                camera.rotation = SCNQuaternion(x: Float(quaternion.x), y: Float(quaternion.y), z: Float(quaternion.z), w: Float(quaternion.w))
-//            }
-//        })
-//        
-//    }
-//    
-//    func setupScene()
-//    {
-//        var w = CGRectGetMaxX(self.view.bounds)
-//        var sceneView = SCNView(frame: CGRect(x: 0, y: 0, width: w, height: w))
-//        sceneView.center = CGPoint(x: CGRectGetMidX(self.view.bounds), y: CGRectGetMidY(self.view.bounds))
-//        sceneView.delegate = self
-//        self.view.addSubview(sceneView)
-//        
-//        sceneView.scene = SCNScene()
-//        sceneView.backgroundColor = UIColor.brownColor()
-//        self.scene = sceneView.scene
-//    }
-//    
-//    func setupObject()
-//    {
-//        for i in 0..<3 {
-//            var text = SCNText(string: "Camera Test", extrusionDepth: 5)
-//            text.font = UIFont.boldSystemFontOfSize(15.0)
-//            var textNode = SCNNode(geometry: text)
-//            if i==1 { textNode.name = "text" }
-//            textNode.position = SCNVector3(x: 0, y: Float((i-1) * 20), z: 0)
-//            textNode.rotation = SCNVector4(x: 0, y: 1, z: 1, w: 0.8 * Float(i))
-//            self.scene?.rootNode.addChildNode(textNode)
-//            
-//            var min = SCNVector3(x: 0, y: 0, z: 0)
-//            var max = SCNVector3(x: 0, y: 0, z: 0)
-//            if textNode.getBoundingBoxMin(&min, max:&max) {
-//                textNode.pivot = SCNMatrix4MakeTranslation((max.x + min.x) * 0.5, 0, 0);
-//            }
-//        }
-//    }
-//    
-//    func setupLight()
-//    {
-//        var light = SCNLight()
-//        light.type = SCNLightTypeSpot
-//        light.color = UIColor.redColor()
-//        var spot = SCNNode()
-//        spot.light = light
-//        spot.position = SCNVector3(x: 0, y: 0, z: 250)
-//        self.scene?.rootNode.addChildNode(spot)
-//    }
-//    
-//    func setupCamera()
-//    {
-//        var cameraNode = SCNNode()
-//        cameraNode.name = "camera"
-//        cameraNode.camera = SCNCamera()
-//        cameraNode.camera?.zFar = 200
-//        cameraNode.position = SCNVector3(x: 30, y: 0, z: 100)
-//        if let target = self.scene?.rootNode.childNodeWithName("text", recursively: false) {
-//            cameraNode.constraints = [SCNLookAtConstraint(target: target)]
-//        }
-//        self.scene?.rootNode.addChildNode(cameraNode)
-//    }
-//    
-//    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("tick"), userInfo: nil, repeats: true)
-//    }
-//    
-//    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        self.timer?.invalidate()
-//    }
-//    
-//    var angle = Float(M_PI/2.0)
-//    func tick()
-//    {
-//        if let camera = self.scene?.rootNode.childNodeWithName("camera", recursively: false) {
-////            camera.position = SCNVector3(x: Float(100 * cos(angle)), y: 0, z: Float(100 * sin(angle)))
-//        
-////            camera.rotation = SCNQuaternion(x: <#Float#>, y: <#Float#>, z: <#Float#>, w: <#Float#>)
-//            
-//            
-//        }
-//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
