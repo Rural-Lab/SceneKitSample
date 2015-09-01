@@ -5,13 +5,15 @@ import SceneKit
 import CoreMotion
 import CoreLocation
 
-class GameViewController: UIViewController ,CLLocationManagerDelegate {
+class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneRendererDelegate {
+    
+    var tmpint=0
     
     var lm: CLLocationManager! = nil
     
     // create instance of MotionManager
     let motionManager: CMMotionManager = CMMotionManager()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,6 +21,15 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate {
         // 子ノードを追加していくことでシーンにオブジェクトを追加していく。
         // ここではdaeファイル(3Dデータ)の読み込みを行っている。
         let scene = SCNScene(named: "art.scnassets/ship.dae")
+        
+        scene!.background.contents = [
+            UIImage(named: "envmap_interstellar/right.tga")!,
+            UIImage(named: "envmap_interstellar/left.tga")!,
+            UIImage(named: "envmap_interstellar/top.tga")!,
+            UIImage(named: "envmap_interstellar/bottom.tga")!,
+            UIImage(named: "envmap_interstellar/front.tga")!,
+            UIImage(named: "envmap_interstellar/back.tga")!
+        ]
         
         // シーンオブジェクトを撮影するためのノードを作成
         let cameraNode = SCNNode()
@@ -29,7 +40,7 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate {
         
         // カメラの位置を設定する。
         cameraNode.position = SCNVector3(x: 0, y: 0, z: 10)
-        cameraNode.rotation = SCNVector4(x: 0, y: 0, z: 0, w: 0)
+//        cameraNode.rotation = SCNVector4(x: 0, y: 0, z: 0, w: 0)
         
         // シーンに光を与える為のノードを作成
         let lightNode = SCNNode()
@@ -123,10 +134,26 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate {
 //            self.attitude_w.text = String(format: "%.2f", quaternion.w)
 //            println("x:\(quaternion.x) y:\(quaternion.y) z:\(quaternion.z) w:\(quaternion.w) ")
             println("x:\(cameraNode.rotation.x),y:\(cameraNode.rotation.y),z:\(cameraNode.rotation.z)")
-            println("x:\(cameraNode.position.x),y:\(cameraNode.position.y),z:\(cameraNode.position.z)")
-            println("------------------------------------")
+//            println("x:\(cameraNode.position.x),y:\(cameraNode.position.y),z:\(cameraNode.position.z)")
+//            println("------------------------------------")
+//            if let camera = scnView.scene!.rootNode.childNodeWithName("camera", recursively: false) {
+            SCNTransaction.begin()
+            SCNTransaction.setAnimationDuration(0.5)
             
-            cameraNode.rotation = SCNVector4(x: Float((quaternion.x+1)*180), y: Float((quaternion.y+1)*180), z: Float((quaternion.z+1)*180), w: Float(quaternion.w+1))
+            
+            cameraNode.rotation = SCNQuaternion(x: Float32(quaternion.x), y: Float32(quaternion.y), z: Float32(quaternion.z), w: Float32(quaternion.w))
+
+            let gq1 = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(-90), 1, 0, 0)
+            let gq2 = GLKQuaternionMake(Float(quaternion.x), Float(quaternion.y), Float(quaternion.z), Float(quaternion.w))
+            let qp = GLKQuaternionMultiply(gq1, gq2)
+            let rq = SCNVector4Make(qp.x, qp.y, qp.z, qp.w)
+            
+            cameraNode.orientation = rq
+        
+            SCNTransaction.commit()
+//                println(camera)
+            
+//            }
         })
     }
     
@@ -182,9 +209,123 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate {
         }
     }
     
+//    weak var scene : SCNScene?
+//    weak var timer : NSTimer?
+//    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        self.view.backgroundColor = UIColor.orangeColor()
+//        
+//        self.setupScene()
+//        self.setupObject()
+//        self.setupLight()
+//        self.setupCamera()
+//        
+//        lm = CLLocationManager()
+//        // 位置情報を取るよう設定
+//
+//        // ※ 初回は確認ダイアログ表示
+//        lm.requestAlwaysAuthorization()
+//        lm.delegate = self
+//        lm.distanceFilter = 1.0 // 1m毎にGPS情報取得
+//        lm.desiredAccuracy = kCLLocationAccuracyBest // 最高精度でGPS取得
+//        lm.startUpdatingLocation() // 位置情報更新機能起動
+//        lm.startUpdatingHeading() // コンパス更新機能起動
+//
+//        // Initialize MotionManager
+//        motionManager.deviceMotionUpdateInterval = 0.05 // 20Hz
+//
+//        // Start motion data acquisition
+//        motionManager.startDeviceMotionUpdatesToQueue( NSOperationQueue.currentQueue(), withHandler:{
+//            deviceManager, error in
+//            var attitude: CMAttitude = deviceManager.attitude
+//            var quaternion: CMQuaternion = attitude.quaternion
+//
+//            if let camera = self.scene?.rootNode.childNodeWithName("camera", recursively: false) {
+//                camera.rotation = SCNQuaternion(x: Float(quaternion.x), y: Float(quaternion.y), z: Float(quaternion.z), w: Float(quaternion.w))
+//            }
+//        })
+//        
+//    }
+//    
+//    func setupScene()
+//    {
+//        var w = CGRectGetMaxX(self.view.bounds)
+//        var sceneView = SCNView(frame: CGRect(x: 0, y: 0, width: w, height: w))
+//        sceneView.center = CGPoint(x: CGRectGetMidX(self.view.bounds), y: CGRectGetMidY(self.view.bounds))
+//        sceneView.delegate = self
+//        self.view.addSubview(sceneView)
+//        
+//        sceneView.scene = SCNScene()
+//        sceneView.backgroundColor = UIColor.brownColor()
+//        self.scene = sceneView.scene
+//    }
+//    
+//    func setupObject()
+//    {
+//        for i in 0..<3 {
+//            var text = SCNText(string: "Camera Test", extrusionDepth: 5)
+//            text.font = UIFont.boldSystemFontOfSize(15.0)
+//            var textNode = SCNNode(geometry: text)
+//            if i==1 { textNode.name = "text" }
+//            textNode.position = SCNVector3(x: 0, y: Float((i-1) * 20), z: 0)
+//            textNode.rotation = SCNVector4(x: 0, y: 1, z: 1, w: 0.8 * Float(i))
+//            self.scene?.rootNode.addChildNode(textNode)
+//            
+//            var min = SCNVector3(x: 0, y: 0, z: 0)
+//            var max = SCNVector3(x: 0, y: 0, z: 0)
+//            if textNode.getBoundingBoxMin(&min, max:&max) {
+//                textNode.pivot = SCNMatrix4MakeTranslation((max.x + min.x) * 0.5, 0, 0);
+//            }
+//        }
+//    }
+//    
+//    func setupLight()
+//    {
+//        var light = SCNLight()
+//        light.type = SCNLightTypeSpot
+//        light.color = UIColor.redColor()
+//        var spot = SCNNode()
+//        spot.light = light
+//        spot.position = SCNVector3(x: 0, y: 0, z: 250)
+//        self.scene?.rootNode.addChildNode(spot)
+//    }
+//    
+//    func setupCamera()
+//    {
+//        var cameraNode = SCNNode()
+//        cameraNode.name = "camera"
+//        cameraNode.camera = SCNCamera()
+//        cameraNode.camera?.zFar = 200
+//        cameraNode.position = SCNVector3(x: 30, y: 0, z: 100)
+//        if let target = self.scene?.rootNode.childNodeWithName("text", recursively: false) {
+//            cameraNode.constraints = [SCNLookAtConstraint(target: target)]
+//        }
+//        self.scene?.rootNode.addChildNode(cameraNode)
+//    }
+//    
+//    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+//        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("tick"), userInfo: nil, repeats: true)
+//    }
+//    
+//    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+//        self.timer?.invalidate()
+//    }
+//    
+//    var angle = Float(M_PI/2.0)
+//    func tick()
+//    {
+//        if let camera = self.scene?.rootNode.childNodeWithName("camera", recursively: false) {
+////            camera.position = SCNVector3(x: Float(100 * cos(angle)), y: 0, z: Float(100 * sin(angle)))
+//        
+////            camera.rotation = SCNQuaternion(x: <#Float#>, y: <#Float#>, z: <#Float#>, w: <#Float#>)
+//            
+//            
+//        }
+//    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
     
 }

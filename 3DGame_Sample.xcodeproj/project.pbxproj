@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3CDFC4C21B95DD3C0079342C /* envmap_interstellar in Resources */ = {isa = PBXBuildFile; fileRef = 3CDFC4C11B95DD3C0079342C /* envmap_interstellar */; };
 		3CFBEB451B8DB19B00D4D410 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFBEB441B8DB19B00D4D410 /* AppDelegate.swift */; };
 		3CFBEB471B8DB19B00D4D410 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CFBEB461B8DB19B00D4D410 /* art.scnassets */; };
 		3CFBEB491B8DB19B00D4D410 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFBEB481B8DB19B00D4D410 /* GameViewController.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3CDFC4C11B95DD3C0079342C /* envmap_interstellar */ = {isa = PBXFileReference; lastKnownFileType = folder; path = envmap_interstellar; sourceTree = "<group>"; };
 		3CFBEB3F1B8DB19B00D4D410 /* 3DGame_Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3DGame_Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CFBEB431B8DB19B00D4D410 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CFBEB441B8DB19B00D4D410 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 		3CFBEB411B8DB19B00D4D410 /* 3DGame_Sample */ = {
 			isa = PBXGroup;
 			children = (
+				3CDFC4C11B95DD3C0079342C /* envmap_interstellar */,
 				3CFBEB441B8DB19B00D4D410 /* AppDelegate.swift */,
 				3CFBEB461B8DB19B00D4D410 /* art.scnassets */,
 				3CFBEB481B8DB19B00D4D410 /* GameViewController.swift */,
@@ -197,6 +200,7 @@
 			files = (
 				3CFBEB511B8DB19C00D4D410 /* LaunchScreen.xib in Resources */,
 				3CFBEB4E1B8DB19B00D4D410 /* Images.xcassets in Resources */,
+				3CDFC4C21B95DD3C0079342C /* envmap_interstellar in Resources */,
 				3CFBEB471B8DB19B00D4D410 /* art.scnassets in Resources */,
 				3CFBEB4C1B8DB19B00D4D410 /* Main.storyboard in Resources */,
 			);
@@ -415,6 +419,7 @@
 				3CFBEB621B8DB19C00D4D410 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3CFBEB631B8DB19C00D4D410 /* Build configuration list for PBXNativeTarget "3DGame_SampleTests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +428,7 @@
 				3CFBEB651B8DB19C00D4D410 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
