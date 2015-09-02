@@ -118,6 +118,16 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
 //        
 //        scene!.rootNode.addChildNode(aPlaneNode)
         
+//        let name = "Hello sonoda"
+//        let text = SCNText(string: name, extrusionDepth: 0.5)
+//        let textNode = SCNNode(geometry: text)
+//        textNode.position = SCNVector3(x: 0.0, y: 0.0, z: 40.0)
+//        textNode.pivot = SCNMatrix4MakeRotation(Float(M_PI_2)*2, 1.0, 0.0, 0.0)
+//        let const = SCNLookAtConstraint(target: cameraNode)
+//        const.gimbalLockEnabled = true
+//        textNode.constraints = [const]
+//        scene!.rootNode.addChildNode(textNode)
+        
         // シーンを表示するためのビューへの参照を取得
         let scnView = self.view as! SCNView
         
