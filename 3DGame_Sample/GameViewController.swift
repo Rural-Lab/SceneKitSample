@@ -23,6 +23,9 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
     var myImageOutput : AVCaptureStillImageOutput!
     
     var degree = 0.0
+    var a = 0.0
+    var b = 0.0
+    var c = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,17 +72,18 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         // シーンオブジェクトを作成。これ以降シーンオブジェクトのルートノードに
         // 子ノードを追加していくことでシーンにオブジェクトを追加していく。
         // ここではdaeファイル(3Dデータ)の読み込みを行っている。
-        let scene = SCNScene(named: "art.scnassets/ship.dae")
+        //let scene = SCNScene(named: "art.scnassets/ship.dae")
+        let scene = SCNScene()
         
         // シーンオブジェクトを撮影するためのノードを作成
         let cameraNode = SCNNode()
         // カメラノードにカメラオブジェクトを追加
         cameraNode.camera = SCNCamera()
         // シーンのルートノードにカメラノードを追加
-        scene!.rootNode.addChildNode(cameraNode)
+        scene.rootNode.addChildNode(cameraNode)
         
         // カメラの位置を設定する。
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 10)
+        cameraNode.position = SCNVector3(x: 0, y: 0, z: 0)
         
         // シーンに光を与える為のノードを作成
         let lightNode = SCNNode()
@@ -90,7 +94,7 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         // ライトオブジェクトの位置を設定する
         lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
         // シーンのルートノードにライトノードを追加
-        scene!.rootNode.addChildNode(lightNode)
+        scene.rootNode.addChildNode(lightNode)
         
         // シーンに環境光を与える為に環境光ノードを作成
         let ambientLightNode = SCNNode()
@@ -99,12 +103,12 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         // ライトオブジェクトの光属性を環境光を表す属性とする
         ambientLightNode.light!.type = SCNLightTypeAmbient
         // 環境光の色を設定する
-        ambientLightNode.light!.color = UIColor.darkGrayColor()
+        ambientLightNode.light!.color = UIColor.whiteColor()
         // シーンのルートノードに環境光ノードを追加
-        scene!.rootNode.addChildNode(ambientLightNode)
+        scene.rootNode.addChildNode(ambientLightNode)
         
         // ノード名を指定してshipのノードをシーンから取得する
-        let ship = scene!.rootNode.childNodeWithName("ship", recursively: true)!
+        //let ship = scene!.rootNode.childNodeWithName("ship", recursively: true)!
         // shipに対してアニメーションを設定する。ここではy軸を中心とした永続的な回転を設定している。
         
 //        let aPlaneNode = SCNNode()
@@ -118,15 +122,51 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
 //        
 //        scene!.rootNode.addChildNode(aPlaneNode)
         
-//        let name = "Hello sonoda"
-//        let text = SCNText(string: name, extrusionDepth: 0.5)
-//        let textNode = SCNNode(geometry: text)
-//        textNode.position = SCNVector3(x: 0.0, y: 0.0, z: 40.0)
-//        textNode.pivot = SCNMatrix4MakeRotation(Float(M_PI_2)*2, 1.0, 0.0, 0.0)
-//        let const = SCNLookAtConstraint(target: cameraNode)
-//        const.gimbalLockEnabled = true
-//        textNode.constraints = [const]
-//        scene!.rootNode.addChildNode(textNode)
+        let name = "Hello sonoda"
+        let text = SCNText(string: name, extrusionDepth: 1.0)
+        let textNode = SCNNode(geometry: text)
+        
+        var v1 = SCNVector3Zero
+        var v2 = SCNVector3Zero
+        textNode.getBoundingBoxMin(&v1, max: &v2)
+        
+         textNode.pivot = SCNMatrix4Translate(textNode.transform, (v2.x + v1.x) * 0.5, (v2.y + v1.y) * 0.5, (v2.z + v1.z) * 0.5)
+    
+//        textNode.pivot = SCNMatrix4Rotate(cameraNode.transform, Float(M_PI), -1.0, -3.0, -2.0)
+        textNode.pivot = SCNMatrix4Rotate(cameraNode.transform, Float(M_PI), 0.0, 0.0, 0.0)
+        textNode.scale = SCNVector3(x: -1.0, y: 1.0, z: 1.0)
+        let const = SCNLookAtConstraint(target: cameraNode)
+        //const.gimbalLockEnabled = true
+        textNode.constraints = [const]
+
+        textNode.position = SCNVector3(x: 0.0, y: -50.0, z: 0.0)
+        
+        scene.rootNode.addChildNode(textNode)
+        
+        
+        let name2 = "Hello sonoda2"
+        let text2 = SCNText(string: name2, extrusionDepth: 1.0)
+        let textNode2 = SCNNode(geometry: text2)
+        
+        var v12 = SCNVector3Zero
+        var v22 = SCNVector3Zero
+        textNode2.getBoundingBoxMin(&v12, max: &v22)
+        
+        textNode2.pivot = SCNMatrix4Translate(textNode2.transform, (v22.x + v12.x) * 0.5, (v22.y + v12.y) * 0.5, (v22.z + v12.z) * 0.5)
+        
+        //        textNode.pivot = SCNMatrix4Rotate(cameraNode.transform, Float(M_PI), -1.0, -3.0, -2.0)
+        //textNode2.pivot = SCNMatrix4Rotate(textNode.transform, Float(M_PI), 0.0, -0.5, -1.0)
+        //textNode2.pivot = SCNMatrix4Rotate(textNode.transform, Float(M_PI), 0.0, -1.0, 0.0)
+        textNode2.scale = SCNVector3(x: -1.0, y: 1.0, z: 1.0)
+        //const.gimbalLockEnabled = true
+        textNode2.constraints = [const]
+        
+        textNode2.position = SCNVector3(x: 0.0, y: 0.0, z: 50.0)
+        
+        scene.rootNode.addChildNode(textNode2)
+        
+//        createword("motoki", cameraNode: cameraNode, scene: scene!)
+        
         
         // シーンを表示するためのビューへの参照を取得
         let scnView = self.view as! SCNView
@@ -142,7 +182,7 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         scnView.showsStatistics = true
         
         // ビューの背景色を黒に指定
-        scnView.backgroundColor = UIColor.greenColor()
+//        scnView.backgroundColor = UIColor.greenColor()
         
         lm = CLLocationManager()
         // 位置情報を取るよう設定
@@ -163,17 +203,20 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
             deviceManager, error in
             
             var attitude: CMAttitude = deviceManager.attitude
-            
+            let temp = attitude.yaw
+            println(temp)
             var quaternion: CMQuaternion = attitude.quaternion
             
             cameraNode.rotation = SCNQuaternion(x: Float32(quaternion.x), y: Float32(quaternion.y), z: Float32(quaternion.z), w: Float32(quaternion.w))
 
             let gq1 = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(-90), 1, 0, 0)
-            let gq2 = GLKQuaternionMake(Float(quaternion.x), Float(quaternion.y), Float(self.degree), Float(quaternion.w))
+            let gq2 = GLKQuaternionMake(Float(quaternion.x), Float(quaternion.y), Float(quaternion.z), Float(quaternion.w))
             let qp = GLKQuaternionMultiply(gq1, gq2)
             let rq = SCNVector4Make(qp.x, qp.y, qp.z, qp.w)
-            
+        
             cameraNode.orientation = rq
+            //println(rq.x)
+            println(self.b/20)
         })
     }
     
@@ -192,10 +235,39 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
     // コンパスの値を受信
     func locationManager(manager:CLLocationManager, didUpdateHeading newHeading:CLHeading) {
         degree = (newHeading.magneticHeading/180)-1.0
+        //degree = newHeading.magneticHeading
+        a = newHeading.x
+        b = newHeading.y
+        c = newHeading.z
+        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func createword(name:NSString, cameraNode:SCNNode, scene:SCNScene){
+
+        let text = SCNText(string:name, extrusionDepth: 1.0)
+        let textNode = SCNNode(geometry: text)
+        
+        var v1 = SCNVector3Zero
+        var v2 = SCNVector3Zero
+        textNode.getBoundingBoxMin(&v1, max: &v2)
+        
+        textNode.pivot = SCNMatrix4Translate(textNode.transform, (v2.x + v1.x) * 0.5, (v2.y + v1.y) * 0.5, (v2.z + v1.z) * 0.5)
+        
+        
+        //        textNode.pivot = SCNMatrix4Rotate(cameraNode.transform, Float(M_PI), -1.0, -3.0, -2.0)
+        textNode.pivot = SCNMatrix4Rotate(cameraNode.transform, Float(M_PI), 0.0, 1.0, 0.0)
+        
+        let const = SCNLookAtConstraint(target: cameraNode)
+        //const.gimbalLockEnabled = true
+        textNode.constraints = [const]
+        
+        textNode.position = SCNVector3(x: 0.0, y: 0.0, z: 0.0)
+        
+        scene.rootNode.addChildNode(textNode)
     }
     
 }
