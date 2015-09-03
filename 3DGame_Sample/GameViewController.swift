@@ -58,12 +58,11 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         // 画像を表示するレイヤーを生成.
         let myVideoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer.layerWithSession(mySession) as! AVCaptureVideoPreviewLayer
 //        myVideoLayer.frame = self.view.bounds
-        myVideoLayer.frame = CGRectMake(0, 0, self.view.frame.width/2, self.view.frame.height/2)
-        myVideoLayer.position = CGPoint(x: self.view.frame.width/2, y: self.view.frame.height/2)
+        myVideoLayer.frame = CGRectMake(0, 0, self.view.frame.width, self.view.frame.height)
         myVideoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         
-        // Viewに追加.
-//        self.view.layer.addSublayer(myVideoLayer)
+//         Viewに追加.
+        self.view.layer.addSublayer(myVideoLayer)
         
         // セッション開始.
         mySession.startRunning()
@@ -111,17 +110,6 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         //let ship = scene!.rootNode.childNodeWithName("ship", recursively: true)!
         // shipに対してアニメーションを設定する。ここではy軸を中心とした永続的な回転を設定している。
         
-//        let aPlaneNode = SCNNode()
-//        // キューブ型の形状（Geometry）を生成
-//        let aPlaneGeometry = SCNPlane(width: self.view.frame.width/32, height: self.view.frame.height/32)
-//        let PlaneMaterial = SCNMaterial()
-////        PlaneMaterial.diffuse.contents = myVideoLayer
-////        // 上記ノードの形状（Geometry）をキューブにする
-////        aPlaneGeometry.materials = [PlaneMaterial]
-//        aPlaneNode.geometry = aPlaneGeometry
-//        
-//        scene!.rootNode.addChildNode(aPlaneNode)
-        
         let name = "Hello sonoda"
         let text = SCNText(string: name, extrusionDepth: 1.0)
         let textNode = SCNNode(geometry: text)
@@ -132,11 +120,10 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         
          textNode.pivot = SCNMatrix4Translate(textNode.transform, (v2.x + v1.x) * 0.5, (v2.y + v1.y) * 0.5, (v2.z + v1.z) * 0.5)
     
-//        textNode.pivot = SCNMatrix4Rotate(cameraNode.transform, Float(M_PI), -1.0, -3.0, -2.0)
         textNode.pivot = SCNMatrix4Rotate(cameraNode.transform, Float(M_PI), 0.0, 0.0, 0.0)
         textNode.scale = SCNVector3(x: -1.0, y: 1.0, z: 1.0)
         let const = SCNLookAtConstraint(target: cameraNode)
-        //const.gimbalLockEnabled = true
+        const.gimbalLockEnabled = true
         textNode.constraints = [const]
 
         textNode.position = SCNVector3(x: 0.0, y: -50.0, z: 0.0)
@@ -154,35 +141,31 @@ class GameViewController: UIViewController ,CLLocationManagerDelegate, SCNSceneR
         
         textNode2.pivot = SCNMatrix4Translate(textNode2.transform, (v22.x + v12.x) * 0.5, (v22.y + v12.y) * 0.5, (v22.z + v12.z) * 0.5)
         
-        //        textNode.pivot = SCNMatrix4Rotate(cameraNode.transform, Float(M_PI), -1.0, -3.0, -2.0)
-        //textNode2.pivot = SCNMatrix4Rotate(textNode.transform, Float(M_PI), 0.0, -0.5, -1.0)
-        //textNode2.pivot = SCNMatrix4Rotate(textNode.transform, Float(M_PI), 0.0, -1.0, 0.0)
         textNode2.scale = SCNVector3(x: -1.0, y: 1.0, z: 1.0)
-        //const.gimbalLockEnabled = true
         textNode2.constraints = [const]
-        
         textNode2.position = SCNVector3(x: 0.0, y: 0.0, z: 50.0)
-        
         scene.rootNode.addChildNode(textNode2)
         
 //        createword("motoki", cameraNode: cameraNode, scene: scene!)
         
         
         // シーンを表示するためのビューへの参照を取得
-        let scnView = self.view as! SCNView
+        let scnView = SCNView()
+        scnView.frame = self.view.bounds
         
 //        scnView.layer.addSublayer(myVideoLayer)
         // ビューのシーンに今までオブジェクトを追加してきたシーンを代入
         scnView.scene = scene
         
         // シーンに追加されたカメラを単純に操作できるようにする
-        scnView.allowsCameraControl = true
+//        scnView.allowsCameraControl = true
         
         // ビューのフレーム数等のパフォーマンスに関わる統計情報をビューの下部に表示
-        scnView.showsStatistics = true
+//        scnView.showsStatistics = true
         
         // ビューの背景色を黒に指定
-//        scnView.backgroundColor = UIColor.greenColor()
+        scnView.backgroundColor = UIColor.clearColor()
+        self.view.addSubview(scnView)
         
         lm = CLLocationManager()
         // 位置情報を取るよう設定
